@@ -26,7 +26,7 @@ resource "aws_autoscaling_group" "ejoh-three-tier-app-asg" {
 # Create a launch configuration for the EC2 instances
 resource "aws_launch_configuration" "ejoh-three-tier-web-lconfig" {
   name_prefix     = "ejoh-three-tier-web-lconfig"
-  image_id        = "ami-0b3a4110c36b9a5f0"
+  image_id        = "ami-0866a3c8686eaeeba"
   instance_type   = "t2.micro"
   key_name        = "ejoh-three-tier-web-asg-kp"
   security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
@@ -128,12 +128,13 @@ resource "aws_launch_configuration" "ejoh-three-tier-web-lconfig" {
     prevent_destroy = true
     ignore_changes  = all
   }
+  depends_on =  [  aws_launch_configuration.ejoh-three-tier-web-lconfig] 
 }
 
 # Create a launch configuration for the EC2 instances
 resource "aws_launch_configuration" "ejoh-three-tier-app-lconfig" {
   name_prefix     = "ejoh-three-tier-app-lconfig"
-  image_id        = "ami-0b3a4110c36b9a5f0"
+  image_id        = "ami-0866a3c8686eaeeba"
   instance_type   = "t2.micro"
   key_name        = "ejoh-three-tier-app-asg-kp"
   security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg-app.id]
@@ -149,4 +150,5 @@ resource "aws_launch_configuration" "ejoh-three-tier-app-lconfig" {
     prevent_destroy = true
     ignore_changes  = all
   }
+  depends_on = [ aws_security_group.ejoh-three-tier-ec2-asg-sg-app ]
 }
