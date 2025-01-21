@@ -1,18 +1,18 @@
 # Create an EC2 Auto Scaling Group - web
-resource "aws_autoscaling_group" "three-tier-web-asg" {
-  name                 = "three-tier-web-asg"
-  launch_configuration = aws_launch_configuration.three-tier-web-lconfig.id
-  vpc_zone_identifier  = [aws_subnet.three-tier-pub-sub-1.id, aws_subnet.three-tier-pub-sub-2.id]
+resource "aws_autoscaling_group" "ejoh-three-tier-web-asg" {
+  name                 = "ejoh-three-tier-web-asg"
+  launch_configuration = aws_launch_configuration.ejoh-three-tier-web-lconfig.id
+  vpc_zone_identifier  = [aws_subnet.ejoh-three-tier-pub-sub-1.id, aws_subnet.ejoh-three-tier-pub-sub-2.id]
   min_size             = 2
   max_size             = 3
   desired_capacity     = 2
 }
 
 # Create an EC2 Auto Scaling Group - app
-resource "aws_autoscaling_group" "three-tier-app-asg" {
-  name                 = "three-tier-app-asg"
-  launch_configuration = aws_launch_configuration.three-tier-app-lconfig.id
-  vpc_zone_identifier  = [aws_subnet.three-tier-pvt-sub-1.id, aws_subnet.three-tier-pvt-sub-2.id]
+resource "aws_autoscaling_group" "ejoh-three-tier-app-asg" {
+  name                 = "ejoh-three-tier-app-asg"
+  launch_configuration = aws_launch_configuration.ejoh-three-tier-app-lconfig.id
+  vpc_zone_identifier  = [aws_subnet.ejoh-three-tier-pvt-sub-1.id, aws_subnet.ejoh-three-tier-pvt-sub-2.id]
   min_size             = 2
   max_size             = 3
   desired_capacity     = 2
@@ -21,12 +21,12 @@ resource "aws_autoscaling_group" "three-tier-app-asg" {
 ###################################################################################################################################
 
 # Create a launch configuration for the EC2 instances
-resource "aws_launch_configuration" "three-tier-web-lconfig" {
-  name_prefix                 = "three-tier-web-lconfig"
+resource "aws_launch_configuration" "ejoh-three-tier-web-lconfig" {
+  name_prefix                 = "ejoh-three-tier-web-lconfig"
   image_id                    = "ami-0b3a4110c36b9a5f0"
   instance_type               = "t2.micro"
-  key_name                    = "three-tier-web-asg-kp"
-  security_groups             = [aws_security_group.three-tier-ec2-asg-sg.id]
+  key_name                    = "ejoh-three-tier-web-asg-kp"
+  security_groups             = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
   user_data                   = <<-EOF
                                 #!/bin/bash
 
@@ -128,12 +128,12 @@ resource "aws_launch_configuration" "three-tier-web-lconfig" {
 }
 
 # Create a launch configuration for the EC2 instances
-resource "aws_launch_configuration" "three-tier-app-lconfig" {
-  name_prefix                 = "three-tier-app-lconfig"
+resource "aws_launch_configuration" "ejoh-three-tier-app-lconfig" {
+  name_prefix                 = "ejoh-three-tier-app-lconfig"
   image_id                    = "ami-0b3a4110c36b9a5f0"
   instance_type               = "t2.micro"
-  key_name                    = "three-tier-app-asg-kp"
-  security_groups             = [aws_security_group.three-tier-ec2-asg-sg-app.id]
+  key_name                    = "ejoh-three-tier-app-asg-kp"
+  security_groups             = [aws_security_group.ejoh-three-tier-ec2-asg-sg-app.id]
   user_data                   = <<-EOF
                                 #!/bin/bash
 
