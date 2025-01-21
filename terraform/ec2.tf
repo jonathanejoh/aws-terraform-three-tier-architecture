@@ -17,7 +17,7 @@ resource "aws_autoscaling_group" "ejoh-three-tier-app-asg" {
   min_size             = 2
   max_size             = 3
   desired_capacity     = 2
-  depends_on           = [aws_launch_configuration.ejoh-three-tier-app-lconfig]
+
 
 }
 
@@ -28,7 +28,7 @@ resource "aws_launch_configuration" "ejoh-three-tier-web-lconfig" {
   name_prefix     = "ejoh-three-tier-web-lconfig"
   image_id        = "ami-0866a3c8686eaeeba"
   instance_type   = "t2.micro"
-  key_name        = "ejoh-three-tier-web-asg-kp"
+  key_name        = "medium"
   security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
   user_data       = <<-EOF
                                 #!/bin/bash
@@ -136,7 +136,7 @@ resource "aws_launch_configuration" "ejoh-three-tier-app-lconfig" {
   name_prefix     = "ejoh-three-tier-app-lconfig"
   image_id        = "ami-0866a3c8686eaeeba"
   instance_type   = "t2.micro"
-  key_name        = "ejoh-three-tier-app-asg-kp"
+  key_name        = "medium"
   security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg-app.id]
   user_data       = <<-EOF
                                 #!/bin/bash
