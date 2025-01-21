@@ -11,7 +11,7 @@ terraform {
     organization = "medium25"
 
     workspaces {
-      name = "my-portfolio"
+      name = "my-portfolio" 
     }
   }
 }

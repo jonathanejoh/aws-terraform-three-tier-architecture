@@ -359,3 +359,42 @@ The `terraform apply` command applies the execution plan, creating or modifying 
 
 With these commands, your infrastructure will be created and ready for use. 🎉
 aws
+
+
+
+# Verify the console to ensure all resources have been successfully created:  
+
+1. VPC and networking components
+![alt text](img/vpc.png)  
+2. EC2 instances  
+![alt text](img/ec2.png)
+3. Application Load Balancers (ALB)
+![alt text](img/lb.png) 
+4. Target Groups 
+![alt text](img/tg.png)
+5. RDS MySQL Database  
+![alt text](img/db.png)
+
+### Connection Verification  
+
+Once the Auto Scaling Group (ASG) is fully initialized, navigate to the EC2 dashboard to confirm that two EC2 instances have been deployed. 
+![alt text](img/pip.png) 
+
+### Web-Tier ALB Connectivity Test  
+
+To validate that the ALB is correctly routing traffic, access its public DNS. You should be able to reach the website deployed via the EC2 launch template.
+![alt text](img/dns.png)
+
+
+### Web Tier Successfully Built 🎉
+
+We’ve successfully built the Web Tier architecture, ensuring users can directly access our web application.
+
+### Proceed with Terraform Destroy 🛠️
+
+Once all verification steps have been completed and everything checks out, you can safely delete all resources by running the following command:
+
+```bash
+terraform destroy -auto-approve
+```
+![alt text](img/tfdestroy.png)
