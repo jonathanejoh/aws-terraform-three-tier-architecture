@@ -131,7 +131,7 @@ resource "aws_route_table_association" "ejoh-three-tier-rt-as-6" {
 
 # Create an Elastic IP address for the NAT Gateway
 resource "aws_eip" "ejoh-three-tier-nat-eip" {
-  vpc = true
+  domain   = "vpc"
 }
 
 #NatGW
@@ -236,15 +236,15 @@ resource "aws_lb_listener" "ejoh-three-tier-app-lb-listner" {
 
 # Register the instances with the target group - web tier
 resource "aws_autoscaling_attachment" "ejoh-three-tier-web-asattach" {
-  autoscaling_group_name = aws_autoscaling_group.three-tier-web-asg.name
-  alb_target_group_arn   = aws_lb_target_group.three-tier-web-lb-tg.arn
+  autoscaling_group_name = aws_autoscaling_group.ejoh-three-tier-web-asg.name
+  lb_target_group_arn   = aws_lb_target_group.ejoh-three-tier-web-lb-tg.arn
   
 }
 
 # Register the instances with the target group - app tier
 resource "aws_autoscaling_attachment" "ejoh-three-tier-app-asattach" {
-  autoscaling_group_name = aws_autoscaling_group.three-tier-app-asg.name
-  alb_target_group_arn   = aws_lb_target_group.three-tier-app-lb-tg.arn
+  autoscaling_group_name = aws_autoscaling_group.ejoh-three-tier-app-asg.name
+  lb_target_group_arn   = aws_lb_target_group.ejoh-three-tier-app-lb-tg.arn
   
 }
 
