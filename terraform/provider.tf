@@ -1,14 +1,14 @@
+# Define the Terraform configuration
 terraform {
-  required_providers {
+  required_providers { # Specify the required providers
     aws = {
-      source  = "hashicorp/aws"
-      version = "~>4"
+      source  = "hashicorp/aws" # Use the official AWS provider from HashiCorp
+      version = ">= 5.73.0"
     }
   }
+
 }
-
+# Configure the AWS provider for the primary region
 provider "aws" {
-  profile = "default"
-  region  = "us-east-1"
-
+  region = "us-east-1" # Set the AWS region to US East (N. Virginia)
 }

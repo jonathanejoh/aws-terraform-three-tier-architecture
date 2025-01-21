@@ -219,3 +219,143 @@ To achieve high availability and prevent single points of failure, we’ll confi
 - Distributes instances across multiple Availability Zones within the **public subnets**.
 
 This setup ensures the frontend is **highly available**, **scalable**, and **secure**, ready to handle varying traffic loads efficiently.
+
+# Create Application Load Balancer — App Tier
+
+We need to set up an **Application Load Balancer (ALB)** to distribute incoming HTTP traffic to the appropriate targets—our EC2 instances. The ALB will listen for HTTP traffic on **port 80** and route requests to a **target group** associated with the EC2 instances.
+
+Additionally, we’ll define the scaling limits for the **Auto Scaling Group (ASG)** to manage the number of EC2 instances dynamically:
+
+- **Desired capacity**: 2  
+- **Minimum capacity**: 2  
+- **Maximum capacity**: 3
+
+---
+
+# Tier 2: Application Tier (Backend)
+
+The **Application Tier** is where the core functionality of the application resides, responsible for handling request processing and managing data. To ensure **scalability** and **reliability**, we’ll design this tier similarly to the Web Tier, but with additional backend-focused components.
+
+---
+
+## What We Will Build
+
+### Launch Template
+- A template defining the type of EC2 instances for the application, including configuration and settings.
+- Enables quick and consistent provisioning of new instances.
+
+### Auto Scaling Group (ASG)
+- Ensures high availability and scalability by dynamically adjusting the number of EC2 instances in the Application Tier based on load and traffic.
+- Helps maintain performance during traffic spikes.
+
+### Application Load Balancer (ALB)
+- Routes requests from the Web Tier to the Application Tier.
+- Balances traffic across EC2 instances to ensure availability and even workload distribution.
+
+### Bastion Host
+- Provides secure access to application servers without exposing them to the public internet.
+- Acts as a jump server for connecting to instances in private subnets.
+
+---
+
+## a) Create EC2 Auto Scaling Group and Launch Template
+
+To ensure high availability and eliminate single points of failure, we’ll create an **ASG** that dynamically provisions EC2 instances across multiple **Availability Zones** in **private subnets**. The ASG will use a **launch template** to define how instances are configured and deployed.
+
+### Key Differences
+- This setup operates entirely within **private subnets**, where application source code resides.
+- **Security Group Settings**:
+  - The Application Tier security group will allow **ICMP–IPv4** traffic **from the Web Tier** security group, enabling the application server to respond to pings from the web server.
+  - No direct access from the outside is allowed, enhancing security.
+
+By designing the Application Tier this way, we can ensure it is **scalable**, **reliable**, and **secure** while supporting high traffic and processing demands.
+
+# b) Create a Bastion Host
+
+A **bastion host** is a dedicated server that acts as a secure gateway for accessing resources in a private network from a public network. To protect the Application Tier from unauthorized access, we’ll create an EC2 instance in the **Web Tier**. This instance will operate outside of the Auto Scaling Group (ASG) and serve as the only entry point to the private app servers.
+
+### How It Works
+- The bastion host will be **deployed in a public subnet** within the Web Tier.
+- Administrators will connect to the bastion host using **SSH** to access resources in the Application Tier.
+- This setup minimizes exposure by isolating the private network and **restricting direct access** to the application servers.
+
+---
+
+# Tier 3: Database Tier (Data Storage & Retrieval)
+
+The **Database Tier** is where the application will store critical information, including user credentials, session data, transactions, and content. This tier allows the **Application Tier** to perform essential tasks like retrieving and storing data to support the Web Tier and deliver services to users.
+
+### What We’ll Use
+
+- **Relational Database Service (RDS)**  
+  - We will deploy an RDS **MySQL** instance for reliable and scalable data storage.  
+  - The database will reside in **private subnets** within the VPC, ensuring it is inaccessible directly from the public internet.
+
+### Database Tier Functionality
+- The **Application Tier** will handle all communication with the database, reading and writing data as needed.
+- This separation of responsibilities ensures the database is secure while maintaining **high performance** and **availability** for the application.
+
+By incorporating a **bastion host** and a **dedicated Database Tier**, we enhance the **security**, **scalability**, and **functionality** of the overall architecture.
+
+# What We’ll Build
+
+To set up the **Database Tier**, we’ll create the following components:
+
+## Database Security Group
+- A security group that allows **inbound and outbound MySQL traffic (port 3306)** to and from the application servers.  
+- Ensures **secure communication** between the **Application Tier** and the database.
+
+## DB Subnet Group
+- A subnet group that ensures the **RDS database** is deployed in the correct **private subnets**.  
+- Enables **high availability** by spanning multiple **Availability Zones**.
+
+## RDS Database with MySQL
+- A managed **Relational Database Service (RDS)** instance running **MySQL**.  
+- Provides **reliable**, **scalable**, and **secure** data storage for the application.
+
+---
+
+### Why These Components Matter
+
+These components collectively ensure the Database Tier is:
+
+1. **Secure**: Communication is restricted to only the necessary application servers.  
+2. **Accessible**: Proper subnet placement ensures seamless integration with other tiers.  
+3. **Reliable**: Using **RDS MySQL** ensures high availability, backups, and fault tolerance.
+
+Let’s proceed to configure these components in the `database_resources.tf` file!
+
+# Let’s Deploy!
+
+Before running the Terraform commands, ensure you have the following in place:
+
+- Your **AWS credentials** are correctly configured.
+- You are working from the **root directory** of your Terraform project.
+
+---
+
+## Terraform Commands to Deploy
+
+### 1. Initialize Terraform
+The `terraform init` command sets up your Terraform environment. It downloads the required provider plugins and prepares the backend for storing the state file.
+
+```bash
+terraform init
+```
+### Generate the Execution Plan
+The `terraform plan` command creates an execution plan, showing what changes Terraform will make to the infrastructure. It highlights resources that will be created, modified, or deleted.
+
+---
+
+### Apply the Configuration
+The `terraform apply` command applies the execution plan, creating or modifying resources as specified in your Terraform configuration files.
+
+---
+
+## Summary
+1. **Step 1**: Use `terraform init` to set up your Terraform environment.  
+2. **Step 2**: Run `terraform plan` to preview the changes.  
+3. **Step 3**: Execute `terraform apply` to deploy the infrastructure.  
+
+With these commands, your infrastructure will be created and ready for use. 🎉
+aws
