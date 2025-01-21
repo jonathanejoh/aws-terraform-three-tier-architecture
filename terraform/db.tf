@@ -18,11 +18,11 @@ resource "aws_db_instance" "ejoh-three-tier-db" {
   parameter_group_name   = "default.mysql8.0"
   db_subnet_group_name   = aws_db_subnet_group.ejoh-3tier-db-sub-grp.name
   vpc_security_group_ids = ["${aws_security_group.ejoh-three-tier-db-sg.id}"]
-  multi_az            = true
-  skip_final_snapshot = true
-  publicly_accessible = false
+  multi_az               = true
+  skip_final_snapshot    = true
+  publicly_accessible    = false
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false # change to true ig in production.
     ignore_changes  = all
   }
   depends_on = [aws_db_subnet_group.ejoh-3tier-db-sub-grp,
