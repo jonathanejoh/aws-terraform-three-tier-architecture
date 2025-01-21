@@ -6,7 +6,14 @@ terraform {
       version = ">= 5.73.0"
     }
   }
+  cloud {
 
+    organization = "medium25"
+
+    workspaces {
+      name = "my-portfolio"
+    }
+  }
 }
 # Configure the AWS provider for the primary region
 provider "aws" {

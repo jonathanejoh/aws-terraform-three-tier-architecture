@@ -8,9 +8,9 @@ resource "aws_vpc" "ejoh-three-tier-vpc" {
 
 # Public Subnets 
 resource "aws_subnet" "ejoh-three-tier-pub-sub-1" {
-  vpc_id            = aws_vpc.ejoh-three-tier-vpc.id
-  cidr_block        = "10.0.0.0/28"
-  availability_zone = "us-east-1a"
+  vpc_id                  = aws_vpc.ejoh-three-tier-vpc.id
+  cidr_block              = "10.0.0.0/28"
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = "true"
 
   tags = {
@@ -19,9 +19,9 @@ resource "aws_subnet" "ejoh-three-tier-pub-sub-1" {
 }
 
 resource "aws_subnet" "ejoh-three-tier-pub-sub-2" {
-  vpc_id            = aws_vpc.ejoh-three-tier-vpc.id
-  cidr_block        = "10.0.0.16/28"
-  availability_zone = "us-east-1b"
+  vpc_id                  = aws_vpc.ejoh-three-tier-vpc.id
+  cidr_block              = "10.0.0.16/28"
+  availability_zone       = "us-east-1b"
   map_public_ip_on_launch = "true"
   tags = {
     Name = "ejoh-three-tier-pub-sub-2"
@@ -131,7 +131,7 @@ resource "aws_route_table_association" "ejoh-three-tier-rt-as-6" {
 
 # Create an Elastic IP address for the NAT Gateway
 resource "aws_eip" "ejoh-three-tier-nat-eip" {
-  domain   = "vpc"
+  domain = "vpc"
 }
 
 #NatGW
@@ -150,9 +150,9 @@ resource "aws_lb" "ejoh-three-tier-web-lb" {
   name               = "ejoh-three-tier-web-lb"
   internal           = false
   load_balancer_type = "application"
-  
-  security_groups    = [aws_security_group.ejoh-three-tier-alb-sg-1.id]
-  subnets            = [aws_subnet.ejoh-three-tier-pub-sub-1.id, aws_subnet.ejoh-three-tier-pub-sub-2.id]
+
+  security_groups = [aws_security_group.ejoh-three-tier-alb-sg-1.id]
+  subnets         = [aws_subnet.ejoh-three-tier-pub-sub-1.id, aws_subnet.ejoh-three-tier-pub-sub-2.id]
 
   tags = {
     Environment = "ejoh-three-tier-web-lb"
@@ -165,9 +165,9 @@ resource "aws_lb" "ejoh-three-tier-app-lb" {
   name               = "ejoh-three-tier-app-lb"
   internal           = true
   load_balancer_type = "application"
-  
-  security_groups    = [aws_security_group.ejoh-three-tier-alb-sg-2.id]
-  subnets            = [aws_subnet.ejoh-three-tier-pvt-sub-1.id, aws_subnet.ejoh-three-tier-pvt-sub-2.id]
+
+  security_groups = [aws_security_group.ejoh-three-tier-alb-sg-2.id]
+  subnets         = [aws_subnet.ejoh-three-tier-pvt-sub-1.id, aws_subnet.ejoh-three-tier-pvt-sub-2.id]
 
   tags = {
     Environment = "ejoh-three-tier-app-lb"
@@ -237,15 +237,15 @@ resource "aws_lb_listener" "ejoh-three-tier-app-lb-listner" {
 # Register the instances with the target group - web tier
 resource "aws_autoscaling_attachment" "ejoh-three-tier-web-asattach" {
   autoscaling_group_name = aws_autoscaling_group.ejoh-three-tier-web-asg.name
-  lb_target_group_arn   = aws_lb_target_group.ejoh-three-tier-web-lb-tg.arn
-  
+  lb_target_group_arn    = aws_lb_target_group.ejoh-three-tier-web-lb-tg.arn
+
 }
 
 # Register the instances with the target group - app tier
 resource "aws_autoscaling_attachment" "ejoh-three-tier-app-asattach" {
   autoscaling_group_name = aws_autoscaling_group.ejoh-three-tier-app-asg.name
-  lb_target_group_arn   = aws_lb_target_group.ejoh-three-tier-app-lb-tg.arn
-  
+  lb_target_group_arn    = aws_lb_target_group.ejoh-three-tier-app-lb-tg.arn
+
 }
 
 

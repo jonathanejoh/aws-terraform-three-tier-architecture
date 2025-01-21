@@ -37,10 +37,10 @@ resource "aws_security_group" "ejoh-three-tier-alb-sg-2" {
   ]
 
   ingress {
-    from_port          = "80"
-    to_port            = "80"
-    protocol           = "tcp"
-    security_groups    = [aws_security_group.ejoh-three-tier-alb-sg-1.id]
+    from_port       = "80"
+    to_port         = "80"
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ejoh-three-tier-alb-sg-1.id]
   }
 
   tags = {
@@ -97,22 +97,22 @@ resource "aws_security_group" "ejoh-three-tier-ec2-asg-sg-app" {
   ]
 
   ingress {
-    from_port = "-1"
-    to_port   = "-1"
-    protocol  = "icmp"
-    security_groups  = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
+    from_port       = "-1"
+    to_port         = "-1"
+    protocol        = "icmp"
+    security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
   }
   ingress {
-    from_port   = "80"
-    to_port     = "80"
-    protocol    = "tcp"
-    security_groups  = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
+    from_port       = "80"
+    to_port         = "80"
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
   }
   ingress {
-    from_port   = "22"
-    to_port     = "22"
-    protocol    = "tcp"
-    security_groups  = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
+    from_port       = "22"
+    to_port         = "22"
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg.id]
   }
   egress {
     from_port   = "0"
@@ -135,20 +135,20 @@ resource "aws_security_group" "ejoh-three-tier-db-sg" {
   vpc_id      = aws_vpc.ejoh-three-tier-vpc.id
 
   #ingress {
-    #from_port       = 3306
-    #to_port         = 3306
-    #protocol        = "tcp"
-    #security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg-app.id]
-    #cidr_blocks     = ["0.0.0.0/0"]
+  #from_port       = 3306
+  #to_port         = 3306
+  #protocol        = "tcp"
+  #security_groups = [aws_security_group.ejoh-three-tier-ec2-asg-sg-app.id]
+  #cidr_blocks     = ["0.0.0.0/0"]
   #}
 
 
   ingress {
-    from_port        = 3306
-    to_port          = 3306
-    protocol         = "tcp"
-    cidr_blocks      = ["10.0.0.32/28" , "10.0.0.48/28"]
-    description      = "Access for the web ALB SG"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.32/28", "10.0.0.48/28"]
+    description = "Access for the web ALB SG"
     #security_groups = [aws_security_group.prlw-webalb-sg.id]
   }
 
